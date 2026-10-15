@@ -1,0 +1,31 @@
+@import url("fuentes.css");
+
+:root {
+  --primary: #b3261e;
+  --secondary: #1a1a1a;
+  --accent: #e8b93c;
+  --primary-fg: #fff;
+  --link-fg: #b3261e;
+  --link-hover-color: #8a1d17;
+  --link-selected-fg: #8a1d17;
+  --button-bg: #b3261e;
+  --button-hover-bg: #8a1d17;
+  --default-button-bg: #b3261e;
+  --default-button-hover-bg: #8a1d17;
+  --header-bg: #1a1a1a;
+  --header-color: #fff;
+  --header-branding-color: #e8b93c;
+  --header-link-color: #fff;
+  --breadcrumbs-bg: #b3261e;
+  --breadcrumbs-fg: #fff;
+  --breadcrumbs-link-fg: #fff;
+  --module-header-bg: #1a1a1a;
+  --object-tools-bg: #b3261e;
+  --object-tools-hover-bg: #8a1d17;
+  --font-family-primary: "Inter", system-ui, sans-serif;
+}
+body { font-family: var(--font-family-primary); }
+#header { border-bottom: 4px solid #e8b93c; }
+#branding h1, .module h2, .module caption, h1, h2 { font-family: "Fraunces", Georgia, serif; font-weight: 600; }
+#site-name a { color: #e8b93c; }
+div.breadcrumbs { background: #b3261e; }

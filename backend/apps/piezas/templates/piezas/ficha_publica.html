@@ -1,0 +1,29 @@
+{% extends "nucleo/base.html" %}
+{% load static %}
+{% block titulo %}{{ pieza.nombre }} · ArqueoCatalog{% endblock %}
+{% block cuerpo %}
+<main>
+  <section class="heroe">
+    <div class="contenedor">
+      <span class="codigo" style="color: var(--tinta)">{{ pieza.codigo }}</span>
+      <h1 style="margin-top:.6rem">{{ pieza.nombre }}</h1>
+      <p>{{ pieza.periodo_cultural }} · {{ pieza.tipo_pieza }}</p>
+    </div>
+  </section>
+  <div class="contenedor">
+    <article class="ficha">
+      <div class="escalon" aria-hidden="true"></div>
+      <div class="ficha-cuerpo">
+        {% if pieza.descripcion %}<p>{{ pieza.descripcion }}</p>{% endif %}
+        <dl class="datos">
+          <div><dt>Tipo</dt><dd>{{ pieza.tipo_pieza }}</dd></div>
+          <div><dt>Periodo cultural</dt><dd>{{ pieza.periodo_cultural }}</dd></div>
+          {% if pieza.material %}<div><dt>Material</dt><dd>{{ pieza.material }}</dd></div>{% endif %}
+          {% if pieza.etiqueta %}<div><dt>Etiqueta</dt><dd>{{ pieza.etiqueta }}</dd></div>{% endif %}
+          <div class="ancho"><dt>Procedencia</dt><dd>{{ pieza.capa.yacimiento.nombre }}, capa {{ pieza.capa.codigo }}</dd></div>
+        </dl>
+      </div>
+    </article>
+  </div>
+</main>
+{% endblock %}

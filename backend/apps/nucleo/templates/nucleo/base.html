@@ -1,0 +1,21 @@
+{% load static %}<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#b3261e">
+  <title>{% block titulo %}ArqueoCatalog{% endblock %}</title>
+  <link rel="preload" href="{% static 'fonts/fraunces.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{% static 'css/tema.css' %}">
+</head>
+<body>
+  <header class="barra">
+    <div class="contenedor">
+      <a class="marca" href="{% url 'inicio' %}">ArqueoCatalog</a>
+      {% block navegacion %}<a class="enlace" href="{% url 'admin:index' %}">Panel de administración</a>{% endblock %}
+    </div>
+  </header>
+  {% block cuerpo %}{% endblock %}
+  <footer class="pie contenedor">ArqueoCatalog · UMSA, Ingeniería de Sistemas</footer>
+</body>
+</html>

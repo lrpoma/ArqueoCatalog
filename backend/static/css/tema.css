@@ -1,0 +1,98 @@
+@import url("fuentes.css");
+
+:root {
+  --hueso: #f7f4f0;
+  --blanco: #ffffff;
+  --tinta: #1a1a1a;
+  --tinta-suave: #5c554e;
+  --rojo: #b3261e;
+  --rojo-oscuro: #8a1d17;
+  --ocre: #e8b93c;
+  --linea: #e4ddd3;
+  --serif: "Fraunces", Georgia, serif;
+  --sans: "Inter", system-ui, sans-serif;
+  --paso: 16px; /* alto del patrón escalonado */
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--tinta);
+  background: var(--hueso);
+}
+
+h1, h2, h3 {
+  font-family: var(--serif);
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0 0 .5em;
+}
+h1 { font-size: clamp(2rem, 6vw, 3.5rem); }
+h2 { font-size: clamp(1.4rem, 3.5vw, 1.9rem); }
+p { margin: 0 0 1em; max-width: 62ch; }
+a { color: var(--rojo); text-underline-offset: .2em; }
+a:hover { color: var(--rojo-oscuro); }
+
+:focus-visible { outline: 3px solid var(--ocre); outline-offset: 3px; border-radius: 2px; }
+
+.contenedor { width: min(100% - 2rem, 62rem); margin-inline: auto; }
+
+/* Barra superior */
+.barra { background: var(--tinta); color: var(--blanco); }
+.barra .contenedor { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: .8rem; }
+.marca { font-family: var(--serif); font-weight: 600; font-size: 1.25rem; color: var(--blanco); text-decoration: none; }
+.marca:hover { color: var(--ocre); }
+.barra a.enlace { color: var(--blanco); font-size: .95rem; }
+.barra a.enlace:hover { color: var(--ocre); }
+
+/* Patrón escalonado: la firma visual del sitio */
+.escalon { height: var(--paso); background: url("../img/escalonado.svg") repeat-x left bottom / 48px var(--paso); }
+
+/* Héroe */
+.heroe { background: var(--rojo); color: var(--blanco); }
+.heroe .contenedor { padding-block: clamp(3rem, 10vw, 6.5rem) clamp(2.5rem, 7vw, 4.5rem); }
+.heroe h1 { max-width: 14ch; }
+.heroe p { font-size: 1.15rem; color: #fbe9e7; }
+.heroe .escalon { background-color: transparent; }
+
+/* Botones */
+.boton {
+  display: inline-block; padding: .75rem 1.4rem; border-radius: 999px;
+  background: var(--ocre); color: var(--tinta); font-weight: 600; text-decoration: none;
+  transition: background .15s, transform .15s;
+}
+.boton:hover { background: #f2c94f; color: var(--tinta); }
+.boton:active { transform: translateY(1px); }
+.boton.secundario { background: transparent; color: var(--blanco); border: 2px solid currentColor; }
+.boton.secundario:hover { background: rgba(255,255,255,.12); color: var(--blanco); }
+
+/* Secciones */
+.seccion { padding-block: clamp(2.5rem, 7vw, 4.5rem); }
+.columnas { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+.columnas > div { border-top: 4px solid var(--rojo); padding-top: 1rem; }
+.columnas h3 { font-size: 1.25rem; }
+.columnas p { color: var(--tinta-suave); margin: 0; }
+
+/* Ficha */
+.ficha { background: var(--blanco); border: 1px solid var(--linea); border-radius: .5rem; overflow: hidden; margin-block: -1.5rem 3rem; position: relative; }
+.ficha .escalon { background-color: var(--rojo); }
+.ficha-cuerpo { padding: clamp(1.25rem, 4vw, 2.25rem); }
+.codigo { display: inline-block; font-weight: 600; font-size: .9rem; background: var(--hueso); border: 1px solid var(--linea); border-radius: 999px; padding: .15rem .8rem; }
+.datos { display: grid; gap: 1.1rem 2rem; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); margin: 1.5rem 0 0; }
+.datos dt { font-size: .85rem; color: var(--tinta-suave); }
+.datos dd { margin: 0; font-weight: 500; }
+.datos .ancho { grid-column: 1 / -1; }
+.foto-vacia { aspect-ratio: 16 / 7; background: var(--hueso) url("../img/escalonado.svg") repeat / 48px var(--paso); opacity: .9; }
+
+/* Restringida */
+.aviso { text-align: center; padding-block: clamp(3rem, 12vw, 7rem); }
+.aviso svg { width: 3.5rem; height: 3.5rem; color: var(--rojo); margin-bottom: 1rem; }
+.aviso p { margin-inline: auto; color: var(--tinta-suave); }
+
+.pie { color: var(--tinta-suave); font-size: .9rem; padding-block: 2rem; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

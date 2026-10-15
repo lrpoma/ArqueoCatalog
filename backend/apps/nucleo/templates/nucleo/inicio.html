@@ -1,0 +1,29 @@
+{% extends "nucleo/base.html" %}
+{% block cuerpo %}
+<main>
+  <section class="heroe">
+    <div class="contenedor">
+      <h1>Cada hallazgo, con su historia</h1>
+      <p>Cataloga piezas arqueológicas en campo, sigue cada cambio y comparte su ficha con solo escanear un código QR.</p>
+      <a class="boton" href="{% url 'admin:index' %}">Entrar al panel</a>
+    </div>
+    <div class="escalon" aria-hidden="true"></div>
+  </section>
+  <section class="seccion contenedor">
+    <div class="columnas">
+      <div>
+        <h3>En el yacimiento</h3>
+        <p>Registra capas y piezas desde el celular, con fotos y su procedencia estratigráfica.</p>
+      </div>
+      <div>
+        <h3>Con trazabilidad</h3>
+        <p>Cada cambio de una pieza queda guardado: qué cambió, quién lo hizo y cuándo.</p>
+      </div>
+      <div>
+        <h3>Para todos</h3>
+        <p>Escanea el QR de una pieza pública y consulta su ficha, sin instalar nada.</p>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}
