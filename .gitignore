@@ -1,0 +1,13 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+backend/media/
+backend/staticfiles/
+node_modules/
+.expo/
+app/dist/
+*.apk
+*.keystore

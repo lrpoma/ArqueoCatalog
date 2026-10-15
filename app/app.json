@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "ArqueoCatalog",
+    "slug": "arqueocatalog",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "package": "bo.edu.umsa.arqueocatalog"
+    },
+    "plugins": [
+      "expo-secure-store"
+    ]
+  }
+}
