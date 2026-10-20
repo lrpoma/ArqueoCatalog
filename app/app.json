@@ -17,7 +17,14 @@
     },
     "plugins": [
       "expo-secure-store",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "ArqueoCatalog usa la cámara para fotografiar las piezas.",
+          "photosPermission": "ArqueoCatalog necesita tus fotos para adjuntarlas a una pieza."
+        }
+      ]
     ]
   }
 }

@@ -64,3 +64,19 @@ export function mensajeDeError(error) {
       return 'El servidor tuvo un problema. Inténtalo más tarde.';
   }
 }
+
+// Errores al guardar datos: muestra lo que devuelve la validación del servidor.
+export function mensajeDeGuardado(error) {
+  const datos = error.response?.data;
+  if (error.response?.status === 400 && datos && typeof datos === 'object') {
+    const lineas = Object.entries(datos).map(([campo, msg]) => {
+      const texto = Array.isArray(msg) ? msg.join(' ') : String(msg);
+      return campo === 'non_field_errors' || campo === 'detail' ? texto : `${campo}: ${texto}`;
+    });
+    if (lineas.length) return lineas.join('\n');
+  }
+  if (error.response?.status === 403) return 'No tienes permiso para esta acción.';
+  if (error.response?.status === 404) return 'El registro ya no existe.';
+  if (!error.response) return 'No se pudo conectar con el servidor. Revisa tu red.';
+  return 'El servidor tuvo un problema. Inténtalo más tarde.';
+}
