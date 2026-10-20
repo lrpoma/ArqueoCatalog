@@ -103,6 +103,8 @@ STORAGES = {
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+APK_PATH = Path(env("APK_PATH", default=str(MEDIA_ROOT / "app" / "arqueocatalog.apk")))
+
 # Base de las URLs que codifica el QR (ej. https://arqueo.ejemplo.bo).
 # Vacío: se usa el host de la petición.
 URL_PUBLICA = env("URL_PUBLICA", default="")

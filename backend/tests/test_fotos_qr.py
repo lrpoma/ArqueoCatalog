@@ -122,3 +122,17 @@ def test_ficha_publica_muestra_foto_principal(api_investigador, client):
     foto_id = subir(api_investigador, pieza, imagen_con_gps()).data["id"]
     html = client.get(f"/api/v1/public/piezas/{pieza.codigo}/").content.decode()
     assert f"/api/v1/media/{foto_id}/" in html
+
+
+def test_descargar_apk(client, settings, tmp_path):
+    apk = tmp_path / "app.apk"
+    apk.write_bytes(b"PK-falso")
+    settings.APK_PATH = apk
+    r = client.get("/api/v1/app/descargar.apk")
+    assert r.status_code == 200
+    assert r["Content-Type"] == "application/vnd.android.package-archive"
+
+
+def test_descargar_apk_inexistente_404(client, settings, tmp_path):
+    settings.APK_PATH = tmp_path / "no-existe.apk"
+    assert client.get("/api/v1/app/descargar.apk").status_code == 404
