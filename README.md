@@ -54,6 +54,14 @@ Base `/api/v1/`, `Authorization: Bearer <access>` salvo login y ficha pública.
 | `POST /auth/login/`, `POST /auth/refresh/`, `GET /auth/me/` | Login devuelve `access`, `refresh` y `usuario`; limitado a 10/min |
 | `/yacimientos/`, `/yacimientos/{id}/capas/`, `/piezas/` | CRUD paginado; búsqueda `?search=`, filtros `periodo_cultural`, `estado`, `tipo_pieza`, `etiqueta`, `capa`, `yacimiento`, `publica` |
 | `GET /piezas/{id}/historial/` | Solo lectura; lo llenan las señales |
+| `POST /piezas/{id}/fotos/` | Multipart (`archivo`); JPEG/PNG/WEBP ≤ 8 MB; quita EXIF/GPS y genera miniatura |
+| `GET /piezas/{id}/qr/` | PNG con la URL de la ficha pública (`URL_PUBLICA` define la base) |
+| `GET /media/{foto_id}/` | Foto (`?miniatura=1`); anónimos solo si la pieza es pública y activa |
+| `GET /public/piezas/{codigo}/` | Ficha web: 200 / 403 / 404 |
 | `GET /catalogos/{periodos,tipos,etiquetas}/` | Solo lectura, sin paginar (alimentan selectores) |
 
 `DELETE` desactiva (`activo=False`) y solo lo permite el rol Administrador.
+
+## Despliegue
+
+Primer intento en Dokploy: ver `docs/despliegue-dokploy.md` (usa `docker-compose.dokploy.yml`).
