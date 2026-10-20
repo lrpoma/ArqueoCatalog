@@ -58,6 +58,7 @@ Base `/api/v1/`, `Authorization: Bearer <access>` salvo login y ficha pública.
 | `GET /piezas/{id}/qr/` | PNG con la URL de la ficha pública (`URL_PUBLICA` define la base) |
 | `GET /media/{foto_id}/` | Foto (`?miniatura=1`); anónimos solo si la pieza es pública y activa |
 | `GET /public/piezas/{codigo}/` | Ficha web: 200 / 403 / 404 |
+| `GET /app/descargar.apk` | Instalador de la app (se copia a `APK_PATH`); 404 si no existe |
 | `GET /catalogos/{periodos,tipos,etiquetas}/` | Solo lectura, sin paginar (alimentan selectores) |
 
 `DELETE` desactiva (`activo=False`) y solo lo permite el rol Administrador.
@@ -65,3 +66,8 @@ Base `/api/v1/`, `Authorization: Bearer <access>` salvo login y ficha pública.
 ## Despliegue
 
 Primer intento en Dokploy: ver `docs/despliegue-dokploy.md` (usa `docker-compose.dokploy.yml`).
+
+## Operación
+
+- Respaldo y restauración: `docs/respaldo.md` · `.apk`: `docs/apk.md`
+- Manual de usuario: `docs/manual-usuario.md` · Guion de demo: `docs/guion-demo.md`
