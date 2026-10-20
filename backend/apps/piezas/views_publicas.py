@@ -25,6 +25,7 @@ class FichaPublica(APIView):
             Pieza.objects.select_related(
                 "tipo_pieza", "periodo_cultural", "etiqueta", "capa__yacimiento"
             )
+            .prefetch_related("fotografias")
             .filter(codigo=codigo)
             .first()
         )

@@ -96,3 +96,4 @@ a:hover { color: var(--rojo-oscuro); }
 .pie { color: var(--tinta-suave); font-size: .9rem; padding-block: 2rem; }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+.foto { display:block; width:100%; max-height:28rem; object-fit:contain; background:var(--hueso); border-radius:.35rem; margin-bottom:1.25rem; }

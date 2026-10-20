@@ -1,12 +1,41 @@
 from rest_framework import serializers
 
-from .models import HistorialPieza, Pieza
+from . import fotos
+from .models import Fotografia, HistorialPieza, Pieza
+
+
+class FotografiaSerializer(serializers.ModelSerializer):
+    archivo = serializers.ImageField(write_only=True, validators=[fotos.validar_imagen])
+    url = serializers.SerializerMethodField()
+    url_miniatura = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Fotografia
+        fields = ("id", "archivo", "url", "url_miniatura", "principal")
+        read_only_fields = ("principal",)
+
+    def get_url(self, foto):
+        return f"/api/v1/media/{foto.id}/"
+
+    def get_url_miniatura(self, foto):
+        return f"/api/v1/media/{foto.id}/?miniatura=1"
+
+    def create(self, datos):
+        original, miniatura = fotos.procesar_imagen(datos["archivo"])
+        pieza = datos["pieza"]
+        return Fotografia.objects.create(
+            pieza=pieza,
+            archivo=original,
+            miniatura=miniatura,
+            principal=not pieza.fotografias.exists(),
+        )
 
 
 class PiezaSerializer(serializers.ModelSerializer):
     yacimiento = serializers.IntegerField(source="capa.yacimiento_id", read_only=True)
     yacimiento_nombre = serializers.CharField(source="capa.yacimiento.nombre", read_only=True)
     capa_codigo = serializers.CharField(source="capa.codigo", read_only=True)
+    fotografias = FotografiaSerializer(many=True, read_only=True)
 
     class Meta:
         model = Pieza
@@ -24,6 +53,7 @@ class PiezaSerializer(serializers.ModelSerializer):
             "yacimiento",
             "yacimiento_nombre",
             "publica",
+            "fotografias",
             "activo",
             "usuario_registro",
             "fecha_registro",

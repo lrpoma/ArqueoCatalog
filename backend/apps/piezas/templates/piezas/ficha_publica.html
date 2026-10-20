@@ -14,6 +14,9 @@
     <article class="ficha">
       <div class="escalon" aria-hidden="true"></div>
       <div class="ficha-cuerpo">
+        {% for foto in pieza.fotografias.all %}{% if foto.principal %}
+        <img class="foto" src="{% url 'media' foto.id %}" alt="Fotografía de {{ pieza.nombre }}">
+        {% endif %}{% endfor %}
         {% if pieza.descripcion %}<p>{{ pieza.descripcion }}</p>{% endif %}
         <dl class="datos">
           <div><dt>Tipo</dt><dd>{{ pieza.tipo_pieza }}</dd></div>

@@ -4,7 +4,6 @@ from django.contrib.auth.models import Group
 
 from .models import Institucion, LogAcceso, Usuario
 
-
 # Los permisos se manejan con Usuario.rol; los grupos de Django no se usan.
 admin.site.unregister(Group)
 

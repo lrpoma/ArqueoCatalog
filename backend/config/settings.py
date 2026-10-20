@@ -103,6 +103,10 @@ STORAGES = {
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# Base de las URLs que codifica el QR (ej. https://arqueo.ejemplo.bo).
+# Vacío: se usa el host de la petición.
+URL_PUBLICA = env("URL_PUBLICA", default="")
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
