@@ -19,6 +19,68 @@ PERIODOS = [
 TIPOS = ["Cerámica", "Lítico", "Textil", "Metal", "Hueso"]
 ETIQUETAS = ["Ceremonial", "Doméstico", "Funerario", "En restauración"]
 
+# (nombre, lat, lon, periodo, estado, [(capa, desde, hasta)])
+YACIMIENTOS = [
+    (
+        "Tiwanaku - Akapana",
+        -16.5547,
+        -68.6733,
+        "Tiwanaku",
+        "en_excavacion",
+        [("C-01", 0.0, 0.4), ("C-02", 0.4, 1.1), ("C-03", 1.1, 2.0)],
+    ),
+    (
+        "Isla del Sol - Chincana",
+        -16.0189,
+        -69.1500,
+        "Inca",
+        "en_estudio",
+        [("C-01", 0.0, 0.3), ("C-02", 0.3, 0.9)],
+    ),
+    (
+        "Iwawe",
+        -16.6350,
+        -68.7060,
+        "Formativo",
+        "en_exploracion",
+        [("C-01", 0.0, 0.5)],
+    ),
+    (
+        "Lukurmata",
+        -16.3750,
+        -68.6330,
+        "Señoríos Aymaras",
+        "cerrado",
+        [("C-01", 0.0, 0.6), ("C-02", 0.6, 1.4)],
+    ),
+]
+
+# (nombre, tipo, material, periodo, etiqueta, yacimiento, capa, pública)
+PIEZAS = [
+    ("Vaso ceremonial (kero)", "Cerámica", "Arcilla", "Tiwanaku", "Ceremonial",
+     "Tiwanaku - Akapana", "C-01", True),
+    ("Cuenco con decoración felina", "Cerámica", "Arcilla", "Tiwanaku", "Ceremonial",
+     "Tiwanaku - Akapana", "C-02", True),
+    ("Punta de proyectil", "Lítico", "Obsidiana", "Tiwanaku", "Doméstico",
+     "Tiwanaku - Akapana", "C-02", False),
+    ("Fragmento textil policromo", "Textil", "Fibra de camélido", "Tiwanaku", "En restauración",
+     "Tiwanaku - Akapana", "C-03", True),
+    ("Tupu de plata", "Metal", "Plata", "Inca", "Funerario",
+     "Isla del Sol - Chincana", "C-01", True),
+    ("Aríbalo inca", "Cerámica", "Arcilla", "Inca", "Ceremonial",
+     "Isla del Sol - Chincana", "C-02", False),
+    ("Figurilla de llama", "Metal", "Aleación de cobre", "Inca", None,
+     "Isla del Sol - Chincana", "C-02", True),
+    ("Hacha de piedra pulida", "Lítico", "Basalto", "Formativo", "Doméstico",
+     "Iwawe", "C-01", True),
+    ("Tiesto con engobe rojo", "Cerámica", "Arcilla", "Formativo", None,
+     "Iwawe", "C-01", False),
+    ("Hueso trabajado (tubo)", "Hueso", "Hueso de camélido", "Señoríos Aymaras", "Funerario",
+     "Lukurmata", "C-02", True),
+    ("Olla globular", "Cerámica", "Arcilla", "Señoríos Aymaras", "Doméstico",
+     "Lukurmata", "C-01", True),
+]
+
 
 class Command(BaseCommand):
     help = "Carga catálogos, instituciones, usuarios y registros de ejemplo (idempotente)."
@@ -57,30 +119,36 @@ class Command(BaseCommand):
                 usuario.set_password(password)
                 usuario.save()
 
-        yacimiento, _ = Yacimiento.objects.get_or_create(
-            nombre="Tiwanaku - Akapana",
-            defaults={
-                "latitud": -16.5547,
-                "longitud": -68.6733,
-                "periodo_cultural": periodos["Tiwanaku"],
-                "estado": Yacimiento.Estado.EN_EXCAVACION,
-                "investigador_responsable": investigador,
-            },
-        )
-        capa, _ = CapaEstratigrafica.objects.get_or_create(
-            yacimiento=yacimiento,
-            codigo="C-01",
-            defaults={"profundidad_desde": 0.0, "profundidad_hasta": 0.4},
-        )
-        if not Pieza.objects.exists():
+        capas = {}
+        for nombre, lat, lon, periodo, estado, lista_capas in YACIMIENTOS:
+            yacimiento, _ = Yacimiento.objects.get_or_create(
+                nombre=nombre,
+                defaults={
+                    "latitud": lat,
+                    "longitud": lon,
+                    "periodo_cultural": periodos[periodo],
+                    "estado": estado,
+                    "investigador_responsable": investigador,
+                },
+            )
+            for codigo, desde, hasta in lista_capas:
+                capas[(nombre, codigo)] = CapaEstratigrafica.objects.get_or_create(
+                    yacimiento=yacimiento,
+                    codigo=codigo,
+                    defaults={"profundidad_desde": desde, "profundidad_hasta": hasta},
+                )[0]
+
+        for nombre, tipo, material, periodo, etiqueta, yac, capa, publica in PIEZAS:
+            if Pieza.objects.filter(nombre=nombre).exists():
+                continue
             Pieza.objects.create(
-                nombre="Vaso ceremonial (kero)",
-                tipo_pieza=tipos["Cerámica"],
-                material="Arcilla",
-                periodo_cultural=periodos["Tiwanaku"],
-                etiqueta=Etiqueta.objects.get(nombre="Ceremonial"),
-                capa=capa,
-                publica=True,
+                nombre=nombre,
+                tipo_pieza=tipos[tipo],
+                material=material,
+                periodo_cultural=periodos[periodo],
+                etiqueta=Etiqueta.objects.get(nombre=etiqueta) if etiqueta else None,
+                capa=capas[(yac, capa)],
+                publica=publica,
                 usuario_registro=investigador,
             )
 
