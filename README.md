@@ -44,3 +44,16 @@ docker compose run --rm --no-deps --entrypoint "" -v ./backend:/app backend pyth
 cd app && npm install
 EXPO_PUBLIC_API_URL=http://<IP-de-tu-PC>:8000/api/v1 npx expo start   # escanear con Expo Go
 ```
+
+## API (Sprint 2)
+
+Base `/api/v1/`, `Authorization: Bearer <access>` salvo login y ficha pública.
+
+| Endpoint | Notas |
+|---|---|
+| `POST /auth/login/`, `POST /auth/refresh/`, `GET /auth/me/` | Login devuelve `access`, `refresh` y `usuario`; limitado a 10/min |
+| `/yacimientos/`, `/yacimientos/{id}/capas/`, `/piezas/` | CRUD paginado; búsqueda `?search=`, filtros `periodo_cultural`, `estado`, `tipo_pieza`, `etiqueta`, `capa`, `yacimiento`, `publica` |
+| `GET /piezas/{id}/historial/` | Solo lectura; lo llenan las señales |
+| `GET /catalogos/{periodos,tipos,etiquetas}/` | Solo lectura, sin paginar (alimentan selectores) |
+
+`DELETE` desactiva (`activo=False`) y solo lo permite el rol Administrador.

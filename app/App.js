@@ -4,6 +4,8 @@ import { Fraunces_600SemiBold } from '@expo-google-fonts/fraunces';
 import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, useFonts } from '@expo-google-fonts/inter';
 import { StatusBar } from 'expo-status-bar';
 
+import { AuthProvider, useAuth } from './src/auth/AuthContext';
+import Login from './src/screens/Login';
 import Perfil from './src/screens/Perfil';
 import Piezas from './src/screens/Piezas';
 import Yacimientos from './src/screens/Yacimientos';
@@ -23,9 +25,10 @@ const temaNavegacion = {
   },
 };
 
-export default function App() {
-  const [cargadas] = useFonts({ Fraunces_600SemiBold, Inter_400Regular, Inter_500Medium, Inter_600SemiBold });
-  if (!cargadas) return null;
+function Principal() {
+  const { usuario, cargando } = useAuth();
+  if (cargando) return null;
+  if (!usuario) return <Login />;
 
   return (
     <NavigationContainer theme={temaNavegacion}>
@@ -42,7 +45,18 @@ export default function App() {
         <Tab.Screen name="Piezas" component={Piezas} />
         <Tab.Screen name="Perfil" component={Perfil} />
       </Tab.Navigator>
-      <StatusBar style="light" backgroundColor={colores.rojo} />
     </NavigationContainer>
+  );
+}
+
+export default function App() {
+  const [cargadas] = useFonts({ Fraunces_600SemiBold, Inter_400Regular, Inter_500Medium, Inter_600SemiBold });
+  if (!cargadas) return null;
+
+  return (
+    <AuthProvider>
+      <Principal />
+      <StatusBar style="light" backgroundColor={colores.rojo} />
+    </AuthProvider>
   );
 }

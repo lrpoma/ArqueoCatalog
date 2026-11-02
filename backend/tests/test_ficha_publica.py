@@ -38,4 +38,3 @@ def test_pieza_inactiva_no_visible(client):
 
 def test_inicio(client):
     assert client.get("/").status_code == 200
-
