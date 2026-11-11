@@ -64,3 +64,28 @@ export function mensajeDeError(error) {
       return 'El servidor tuvo un problema. Inténtalo más tarde.';
   }
 }
+
+// Errores de formularios (crear/editar): traduce la respuesta de DRF a mensajes por campo.
+export function errorDeFormulario(error) {
+  if (!error.response) {
+    return { general: 'No se pudo conectar con el servidor. Revisa tu red.', campos: {} };
+  }
+  const { status, data } = error.response;
+  if (status === 400 && data && typeof data === 'object') {
+    const campos = {};
+    let general = '';
+    for (const [clave, valor] of Object.entries(data)) {
+      const texto = Array.isArray(valor) ? valor.join(' ') : String(valor);
+      if (clave === 'non_field_errors' || clave === 'detail') general = texto;
+      else campos[clave] = texto;
+    }
+    return { general: general || 'Revisa los campos marcados.', campos };
+  }
+  const generales = {
+    403: 'No tienes permiso para realizar esta acción.',
+    404: 'El registro ya no existe o fue desactivado.',
+    413: 'El archivo es demasiado grande.',
+    429: 'Demasiadas solicitudes. Espera un minuto e inténtalo de nuevo.',
+  };
+  return { general: generales[status] ?? 'El servidor tuvo un problema. Inténtalo más tarde.', campos: {} };
+}
