@@ -69,3 +69,13 @@ Base `/api/v1/`, `Authorization: Bearer <access>` salvo login y ficha pública.
 | `GET /catalogos/{periodos,tipos,etiquetas}/` | Solo lectura, sin paginar (alimentan selectores) |
 
 `DELETE` desactiva (`activo=False`) y solo lo permite el rol Administrador.
+
+### Fotos, QR y ficha pública (Sprint 3)
+
+| Endpoint | Notas |
+|---|---|
+| `GET/POST /piezas/{id}/fotos/` | POST multipart con el campo `archivo` (JPEG/PNG/WebP, máx. 5 MB). Se re-codifica a JPEG **sin EXIF/GPS**, se limita a 2048 px y se genera miniatura. La primera foto queda como principal |
+| `GET /media/{foto_id}/` | Entrega la imagen con control de visibilidad: personal autenticado ve cualquier foto de una pieza activa; anónimos solo si la pieza es pública; si no, 404. `?miniatura=1` para la miniatura |
+| `GET /piezas/{id}/qr/` | PNG del QR que apunta a `/api/v1/public/piezas/{codigo}/` (el host sale de la petición) |
+| `GET /public/piezas/{codigo}/` | Ficha pública web: 200 si es pública, 403 «Ficha restringida» si no, 404 si no existe |
+
