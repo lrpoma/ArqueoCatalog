@@ -14,6 +14,7 @@
     <article class="ficha">
       <div class="escalon" aria-hidden="true"></div>
       <div class="ficha-cuerpo">
+        {% if foto %}<img src="{% url 'media-foto' foto.id %}" alt="Fotografía de {{ pieza.nombre }}" style="display:block;max-width:100%;height:auto;border-radius:8px;margin-bottom:1rem">{% endif %}
         {% if pieza.descripcion %}<p>{{ pieza.descripcion }}</p>{% endif %}
         <dl class="datos">
           <div><dt>Tipo</dt><dd>{{ pieza.tipo_pieza }}</dd></div>
