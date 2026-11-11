@@ -17,7 +17,29 @@
     },
     "plugins": [
       "expo-secure-store",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "ArqueoCatalog usa la cámara para fotografiar piezas arqueológicas.",
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "ArqueoCatalog accede a tus fotos para adjuntarlas a una pieza.",
+          "cameraPermission": "ArqueoCatalog usa la cámara para fotografiar piezas arqueológicas."
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
     ]
   }
 }

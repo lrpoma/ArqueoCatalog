@@ -38,12 +38,24 @@ Migraciones nuevas (los archivos quedan en el host):
 docker compose run --rm --no-deps --entrypoint "" -v ./backend:/app backend python manage.py makemigrations
 ```
 
-## App (desarrollo)
+## App (APK)
+
+Se desarrolla probando directamente con el `.apk` (build `preview` de EAS), sin Expo Go.
 
 ```bash
 cd app && npm install
-EXPO_PUBLIC_API_URL=http://<IP-de-tu-PC>:8000/api/v1 npx expo start   # escanear con Expo Go
+npm i -g eas-cli && eas login          # una sola vez (cuenta gratuita de expo.dev)
+eas init                               # una sola vez: enlaza el proyecto con tu cuenta
+eas build -p android --profile preview # genera el .apk (descargar e instalar en el celular)
 ```
+
+- La URL del API se fija **al compilar**: `eas.json` → `build.preview.env.EXPO_PUBLIC_API_URL`
+  (hoy `http://192.168.1.14:8001/api/v1`). Si cambia la IP de la PC, actualizarla ahí, agregarla a
+  `ALLOWED_HOSTS` en `.env` y volver a compilar.
+- El celular debe estar en la misma WiFi que la PC y el firewall debe permitir el puerto del backend.
+- `app.json` habilita tráfico HTTP (`usesCleartextTraffic`) solo para pruebas por LAN; con el despliegue
+  en HTTPS (túnel) se debe quitar.
+- Alternativa local sin cola de EAS: `eas build -p android --profile preview --local` (requiere JDK 17 y Android SDK).
 
 ## API (Sprint 2)
 
