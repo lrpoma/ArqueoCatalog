@@ -5,10 +5,10 @@ import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, useFonts } from '
 import { StatusBar } from 'expo-status-bar';
 
 import { AuthProvider, useAuth } from './src/auth/AuthContext';
+import { CatalogosProvider } from './src/catalogos/CatalogosContext';
+import { PilaPiezas, PilaYacimientos } from './src/navegacion/Pilas';
 import Login from './src/screens/Login';
 import Perfil from './src/screens/Perfil';
-import Piezas from './src/screens/Piezas';
-import Yacimientos from './src/screens/Yacimientos';
 import { colores, fuentes } from './src/tema';
 
 const Tab = createBottomTabNavigator();
@@ -31,21 +31,23 @@ function Principal() {
   if (!usuario) return <Login />;
 
   return (
-    <NavigationContainer theme={temaNavegacion}>
-      <Tab.Navigator
-        screenOptions={{
-          headerShown: false,
-          tabBarActiveTintColor: colores.rojo,
-          tabBarInactiveTintColor: colores.tintaSuave,
-          tabBarLabelStyle: { fontFamily: fuentes.textoMedio, fontSize: 12 },
-          tabBarStyle: { borderTopColor: colores.linea },
-        }}
-      >
-        <Tab.Screen name="Yacimientos" component={Yacimientos} />
-        <Tab.Screen name="Piezas" component={Piezas} />
-        <Tab.Screen name="Perfil" component={Perfil} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <CatalogosProvider>
+      <NavigationContainer theme={temaNavegacion}>
+        <Tab.Navigator
+          screenOptions={{
+            headerShown: false,
+            tabBarActiveTintColor: colores.rojo,
+            tabBarInactiveTintColor: colores.tintaSuave,
+            tabBarLabelStyle: { fontFamily: fuentes.textoMedio, fontSize: 12 },
+            tabBarStyle: { borderTopColor: colores.linea },
+          }}
+        >
+          <Tab.Screen name="Yacimientos" component={PilaYacimientos} />
+          <Tab.Screen name="Piezas" component={PilaPiezas} />
+          <Tab.Screen name="Perfil" component={Perfil} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </CatalogosProvider>
   );
 }
 
