@@ -70,6 +70,10 @@ Base `/api/v1/`, `Authorization: Bearer <access>` salvo login y ficha pública.
 
 `DELETE` desactiva (`activo=False`) y solo lo permite el rol Administrador.
 
+Una pieza solo es visible si ella, su capa y su yacimiento están activos. Al desactivar un yacimiento o una capa, sus
+piezas dejan de mostrarse en la app, el QR, `/media/` y la ficha pública (404 en la API; 403 «Ficha restringida» en la
+ficha), sin modificar ni borrar nada; al reactivarlo desde el panel admin vuelven a verse.
+
 ### Fotos, QR y ficha pública (Sprint 3)
 
 | Endpoint | Notas |
