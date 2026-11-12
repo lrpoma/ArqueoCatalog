@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 
 import { cliente, registrarExpiracion } from '../api/cliente';
 import { borrarTokens, guardarTokens, leerAccess } from '../api/sesion';
+import { vaciarCacheFotos } from '../componentes/FotoProtegida';
 
 const AuthContext = createContext(null);
 
@@ -11,12 +12,16 @@ export function AuthProvider({ children }) {
 
   const cerrarSesion = useCallback(async () => {
     await borrarTokens();
+    vaciarCacheFotos();
     setUsuario(null);
   }, []);
 
   // Al abrir la app: si hay token guardado, se recupera el perfil.
   useEffect(() => {
-    registrarExpiracion(() => setUsuario(null));
+    registrarExpiracion(() => {
+      vaciarCacheFotos();
+      setUsuario(null);
+    });
     (async () => {
       try {
         if (await leerAccess()) {

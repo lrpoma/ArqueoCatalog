@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Fraunces_600SemiBold } from '@expo-google-fonts/fraunces';
@@ -12,6 +13,12 @@ import Perfil from './src/screens/Perfil';
 import { colores, fuentes } from './src/tema';
 
 const Tab = createBottomTabNavigator();
+
+const ICONOS = {
+  Yacimientos: ['map', 'map-outline'],
+  Piezas: ['cube', 'cube-outline'],
+  Perfil: ['person', 'person-outline'],
+};
 
 const temaNavegacion = {
   ...DefaultTheme,
@@ -34,13 +41,16 @@ function Principal() {
     <CatalogosProvider>
       <NavigationContainer theme={temaNavegacion}>
         <Tab.Navigator
-          screenOptions={{
+          screenOptions={({ route }) => ({
             headerShown: false,
+            tabBarIcon: ({ focused, color, size }) => (
+              <Ionicons name={ICONOS[route.name][focused ? 0 : 1]} size={size} color={color} />
+            ),
             tabBarActiveTintColor: colores.rojo,
             tabBarInactiveTintColor: colores.tintaSuave,
             tabBarLabelStyle: { fontFamily: fuentes.textoMedio, fontSize: 12 },
             tabBarStyle: { borderTopColor: colores.linea },
-          }}
+          })}
         >
           <Tab.Screen name="Yacimientos" component={PilaYacimientos} />
           <Tab.Screen name="Piezas" component={PilaPiezas} />
@@ -52,7 +62,13 @@ function Principal() {
 }
 
 export default function App() {
-  const [cargadas] = useFonts({ Fraunces_600SemiBold, Inter_400Regular, Inter_500Medium, Inter_600SemiBold });
+  const [cargadas] = useFonts({
+    Fraunces_600SemiBold,
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    ...Ionicons.font, // se precarga para que los íconos no parpadeen
+  });
   if (!cargadas) return null;
 
   return (

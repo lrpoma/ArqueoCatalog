@@ -13,7 +13,8 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "package": "bo.edu.umsa.arqueocatalog"
+      "package": "bo.edu.umsa.arqueocatalog",
+      "versionCode": 2
     },
     "plugins": [
       "expo-secure-store",

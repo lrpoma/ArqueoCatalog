@@ -163,7 +163,7 @@ export default function PiezaDetalle({ route, navigation }) {
       {/* Foto a pantalla completa. */}
       <Modal visible={ampliada !== null} transparent animationType="fade" onRequestClose={() => setAmpliada(null)}>
         <Pressable style={[styles.fondo, { padding: 0, backgroundColor: '#000' }]} onPress={() => setAmpliada(null)}>
-          {ampliada !== null ? <FotoProtegida uri={urlFoto(ampliada)} style={{ flex: 1 }} resizeMode="contain" /> : null}
+          {ampliada !== null ? <FotoProtegida uri={urlFoto(ampliada)} style={{ width: '100%', height: '100%' }} resizeMode="contain" /> : null}
         </Pressable>
       </Modal>
     </View>
