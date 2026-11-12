@@ -30,7 +30,7 @@ class FichaPublica(APIView):
         )
         if pieza is None:
             raise Http404
-        if not (pieza.publica and pieza.activo):
+        if not (pieza.publica and pieza.visible):
             return Response(template_name="piezas/ficha_restringida.html", status=403)
         foto = pieza.fotografias.order_by("-principal", "id").first()
         return Response({"pieza": pieza, "foto": foto}, template_name="piezas/ficha_publica.html")

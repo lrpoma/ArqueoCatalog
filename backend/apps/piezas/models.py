@@ -5,6 +5,17 @@ from django.utils import timezone
 MAX_REINTENTOS_CODIGO = 5
 
 
+class PiezaQuerySet(models.QuerySet):
+    def visibles(self):
+        """Piezas que se muestran en la app, el QR y la ficha pública.
+
+        Además de la pieza, su capa y su yacimiento deben estar activos: desactivar un
+        yacimiento o una capa oculta lo que contiene, sin modificar ni borrar nada; al
+        reactivarlo, las piezas reaparecen.
+        """
+        return self.filter(activo=True, capa__activo=True, capa__yacimiento__activo=True)
+
+
 class Pieza(models.Model):
     codigo = models.CharField(max_length=20, unique=True, editable=False)
     nombre = models.CharField(max_length=200)
@@ -33,6 +44,8 @@ class Pieza(models.Model):
     )
     fecha_registro = models.DateTimeField(auto_now_add=True)
 
+    objects = PiezaQuerySet.as_manager()
+
     class Meta:
         ordering = ["-fecha_registro"]
 
@@ -60,6 +73,11 @@ class Pieza(models.Model):
         ultimo = cls.objects.filter(codigo__startswith=prefijo).order_by("-codigo").first()
         secuencia = int(ultimo.codigo.rsplit("-", 1)[1]) + 1 if ultimo else 1
         return f"{prefijo}{secuencia:04d}"
+
+    @property
+    def visible(self):
+        """Misma regla que `PiezaQuerySet.visibles()`, para una pieza ya cargada."""
+        return self.activo and self.capa.activo and self.capa.yacimiento.activo
 
 
 class Fotografia(models.Model):

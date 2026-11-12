@@ -26,7 +26,7 @@ class PiezaViewSet(RegistraUsuarioMixin, EliminacionLogicaMixin, viewsets.ModelV
 
     def get_queryset(self):
         return (
-            Pieza.objects.filter(activo=True)
+            Pieza.objects.visibles()
             .select_related("tipo_pieza", "periodo_cultural", "etiqueta", "capa__yacimiento")
             .prefetch_related("fotografias")
         )

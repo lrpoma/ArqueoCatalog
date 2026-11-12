@@ -23,7 +23,11 @@ class MediaFoto(APIView):
 
     def get(self, request, foto_id):
         foto = get_object_or_404(
-            Fotografia.objects.select_related("pieza"), pk=foto_id, pieza__activo=True
+            Fotografia.objects.select_related("pieza"),
+            pk=foto_id,
+            pieza__activo=True,
+            pieza__capa__activo=True,
+            pieza__capa__yacimiento__activo=True,
         )
         usuario = request.user
         es_personal = (
