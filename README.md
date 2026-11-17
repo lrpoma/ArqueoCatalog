@@ -57,7 +57,7 @@ eas build -p android --profile preview # genera el .apk (descargar e instalar en
   `ALLOWED_HOSTS` en `.env` y volver a compilar.
 - El celular debe estar en la misma WiFi que la PC y el firewall debe permitir el puerto del backend.
 - `app.config.js` habilita tráfico HTTP (`usesCleartextTraffic`) solo si `EXPO_PUBLIC_API_URL` no es `https://`;
-  el perfil `production` de `eas.json` apunta al dominio del despliegue (reemplazar `CAMBIAR-POR-TU-DOMINIO`).
+  el perfil `production` de `eas.json` apunta al dominio del despliegue (hoy `https://arqueocatalog.lrpoma.site/api/v1`).
 - Alternativa local sin cola de EAS: `eas build -p android --profile preview --local` (requiere JDK 17 y Android SDK).
 
 ## API (Sprint 2)

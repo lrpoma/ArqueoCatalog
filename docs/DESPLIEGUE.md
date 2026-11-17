@@ -20,7 +20,7 @@ Archivos del repositorio que usa esta guía:
 ## 0. Antes de empezar (checklist)
 
 - [ ] Servidor Linux con Docker y Dokploy **0.31.3** instalado y accesible (panel en `http://IP:3000`).
-- [ ] Un **dominio** en Cloudflare (el DNS debe estar gestionado por Cloudflare). Sirve uno de ~10 USD/año; los subdominios gratuitos tipo sslip.io **no sirven** para HTTPS.
+- [ ] Un **dominio** en Cloudflare (aquí `lrpoma.site`) (el DNS debe estar gestionado por Cloudflare). Sirve uno de ~10 USD/año; los subdominios gratuitos tipo sslip.io **no sirven** para HTTPS.
 - [ ] El repositorio subido a GitHub (público, o privado con la integración de GitHub de Dokploy).
 - [ ] `docker-compose.dokploy.yml` está en la rama que vas a desplegar (`main`).
 - [ ] Cuenta gratuita en Cloudflare R2 o Backblaze B2 para los respaldos (paso 7).
@@ -38,13 +38,13 @@ python3 -c "import secrets; print(secrets.token_urlsafe(60))"   # SECRET_KEY
 python3 -c "import secrets; print(secrets.token_urlsafe(24))"   # POSTGRES_PASSWORD
 ```
 
-Con tu dominio (ejemplo `arqueo.midominio.com`) las variables son:
+Se usa **un solo dominio**, `arqueocatalog.lrpoma.site` (no hace falta `arqueocatalog.api.lrpoma.site`: el mismo backend sirve todo, y el certificado gratuito de Cloudflare cubre solo un nivel de subdominio, `*.lrpoma.site`). Con él (sirve la API, `/admin/`, la ficha pública y el `.apk`), las variables son:
 
 ```env
 SECRET_KEY=<la generada>
-ALLOWED_HOSTS=arqueo.midominio.com
-CSRF_TRUSTED_ORIGINS=https://arqueo.midominio.com
-PUBLIC_BASE_URL=https://arqueo.midominio.com
+ALLOWED_HOSTS=arqueocatalog.lrpoma.site
+CSRF_TRUSTED_ORIGINS=https://arqueocatalog.lrpoma.site
+PUBLIC_BASE_URL=https://arqueocatalog.lrpoma.site
 CORS_ALLOWED_ORIGINS=
 IP_CLIENTE_HEADER=CF-Connecting-IP
 POSTGRES_DB=arqueocatalog
@@ -69,7 +69,7 @@ POSTGRES_PASSWORD=<la generada>
    - **Advanced → Arguments**: agrega `tunnel` y luego `run` (dos argumentos, en ese orden).
    - **Deploy** y confirma que el contenedor queda *healthy*.
 4. En Cloudflare, en el túnel → **Published application routes → Add**:
-   - Subdominio + dominio: `arqueo` + `midominio.com`
+   - Subdominio + dominio: `arqueocatalog` + `lrpoma.site`
    - Service: **HTTP**, URL: `dokploy-traefik:80`
 
 > Fuente: guía oficial de Dokploy para Cloudflare Tunnels. Con túnel **no** actives Let's Encrypt ni HTTPS en Dokploy: Cloudflare termina el TLS y Traefik habla HTTP internamente.
@@ -88,7 +88,7 @@ POSTGRES_PASSWORD=<la generada>
    - Dokploy las escribe en un `.env` junto al compose; el compose las lee con `${VARIABLE}` y las pasa a los contenedores. Si el despliegue falla con «definir SECRET_KEY» es que falta alguna.
 4. Pestaña **Domains → Add Domain**:
    - **Service Name**: `backend`
-   - **Host**: `arqueo.midominio.com`
+   - **Host**: `arqueocatalog.lrpoma.site`
    - **Container Port**: `8000`
    - **HTTPS**: **desactivado** (certificado *None*), porque el HTTPS lo pone Cloudflare.
    - Guardar. En Compose, **cambiar un dominio exige redesplegar**.
@@ -98,7 +98,7 @@ POSTGRES_PASSWORD=<la generada>
 Verifica:
 
 ```bash
-curl https://arqueo.midominio.com/api/v1/health/      # {"estado": "ok"}
+curl https://arqueocatalog.lrpoma.site/api/v1/health/      # {"estado": "ok"}
 ```
 
 ---
@@ -111,7 +111,7 @@ Abre una terminal en el contenedor del backend: Dokploy → **Docker → Contain
 python manage.py createsuperuser        # queda con rol «administrador» automáticamente
 ```
 
-Luego entra a `https://arqueo.midominio.com/admin/` y carga desde el panel: instituciones, periodos culturales, tipos de pieza y etiquetas, y los usuarios investigadores (ver `docs/FUENTES_DATOS.md` para de dónde sacar los datos).
+Luego entra a `https://arqueocatalog.lrpoma.site/admin/` y carga desde el panel: instituciones, periodos culturales, tipos de pieza y etiquetas, y los usuarios investigadores (ver `docs/FUENTES_DATOS.md` para de dónde sacar los datos).
 
 Atajo para una demo rápida, con datos de ejemplo del proyecto:
 
@@ -131,7 +131,7 @@ El endpoint `GET /api/v1/app/descargar.apk` entrega el archivo `/app/media/app/a
 CONT=$(docker ps --format '{{.Names}}' | grep backend)       # nombre del contenedor
 docker exec "$CONT" mkdir -p /app/media/app
 docker cp ArqueoCatalog.apk "$CONT":/app/media/app/arqueocatalog.apk
-curl -I https://arqueo.midominio.com/api/v1/app/descargar.apk   # 200
+curl -I https://arqueocatalog.lrpoma.site/api/v1/app/descargar.apk   # 200
 ```
 
 Mientras no exista el archivo el endpoint responde 404. El archivo vive en el volumen, así que un redespliegue **no lo borra**.
@@ -140,7 +140,7 @@ Mientras no exista el archivo el endpoint responde 404. El archivo vive en el vo
 
 ## 6. Compilar la app contra el servidor
 
-1. En `app/eas.json`, perfil `production`: cambia `https://CAMBIAR-POR-TU-DOMINIO/api/v1` por tu dominio real.
+1. En `app/eas.json`, perfil `production`: ya apunta a `https://arqueocatalog.lrpoma.site/api/v1`; cámbialo solo si usas otro dominio.
 2. `app/app.config.js` desactiva solo `usesCleartextTraffic` cuando la URL es `https://`, así que no hay que tocar `app.json`.
 3. Sube `android.versionCode` en `app/app.json` (hoy 2) si vas a reemplazar una instalación previa.
 4. Compila:
