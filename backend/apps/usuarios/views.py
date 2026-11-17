@@ -5,10 +5,12 @@ from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from apps.nucleo.red import IdentificarPorIPCliente
+
 from .serializers import LoginSerializer, UsuarioSerializer
 
 
-class LoginThrottle(AnonRateThrottle):
+class LoginThrottle(IdentificarPorIPCliente, AnonRateThrottle):
     scope = "login"
 
 

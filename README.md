@@ -8,7 +8,10 @@ Detalle completo en `Propuesta_ArqueoCatalog_v4.md` y reglas de trabajo en `CLAU
 ```
 backend/   Django 5 + DRF (apps: usuarios, catalogos, yacimientos, piezas, nucleo)
 app/       Expo / React Native (Android)
-docker-compose.yml   PostgreSQL 16 + backend
+docker-compose.yml           PostgreSQL 16 + backend (desarrollo y plan B local)
+docker-compose.dokploy.yml   Compose de producción para Dokploy
+scripts/                     respaldo.sh y restaurar.sh (pg_dump + fotos)
+docs/                        DESPLIEGUE.md (Dokploy 0.31.3) y FUENTES_DATOS.md
 .env.example
 ```
 
@@ -53,8 +56,8 @@ eas build -p android --profile preview # genera el .apk (descargar e instalar en
   (hoy `http://192.168.1.14:8001/api/v1`). Si cambia la IP de la PC, actualizarla ahí, agregarla a
   `ALLOWED_HOSTS` en `.env` y volver a compilar.
 - El celular debe estar en la misma WiFi que la PC y el firewall debe permitir el puerto del backend.
-- `app.json` habilita tráfico HTTP (`usesCleartextTraffic`) solo para pruebas por LAN; con el despliegue
-  en HTTPS (túnel) se debe quitar.
+- `app.config.js` habilita tráfico HTTP (`usesCleartextTraffic`) solo si `EXPO_PUBLIC_API_URL` no es `https://`;
+  el perfil `production` de `eas.json` apunta al dominio del despliegue (reemplazar `CAMBIAR-POR-TU-DOMINIO`).
 - Alternativa local sin cola de EAS: `eas build -p android --profile preview --local` (requiere JDK 17 y Android SDK).
 
 ## API (Sprint 2)
@@ -83,3 +86,15 @@ ficha), sin modificar ni borrar nada; al reactivarlo desde el panel admin vuelve
 | `GET /piezas/{id}/qr/` | PNG del QR que apunta a `/api/v1/public/piezas/{codigo}/` (el host sale de la petición) |
 | `GET /public/piezas/{codigo}/` | Ficha pública web: 200 si es pública, 403 «Ficha restringida» si no, 404 si no existe |
 
+
+### Despliegue, respaldos y descarga del `.apk` (Sprint 4)
+
+| Endpoint | Notas |
+|---|---|
+| `GET /app/descargar.apk` | Anónimo; entrega `/app/media/app/arqueocatalog.apk` (volumen `media`); 404 si aún no se subió |
+
+- Despliegue paso a paso en Dokploy + Cloudflare Tunnel: [`docs/DESPLIEGUE.md`](docs/DESPLIEGUE.md).
+- Datos para llenar el sistema (20 fuentes con licencias): [`docs/FUENTES_DATOS.md`](docs/FUENTES_DATOS.md).
+- Variables de producción nuevas: `PUBLIC_BASE_URL` (URL https para QR y fotos) e `IP_CLIENTE_HEADER`
+  (p. ej. `CF-Connecting-IP`, IP real para el log de accesos y el throttling).
+- Respaldo local: `./scripts/respaldo.sh [destino]` (pg_dump + fotos); restauración: `./scripts/restaurar.sh <db.dump> <media.tar.gz>`.

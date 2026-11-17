@@ -5,10 +5,12 @@ from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 
+from apps.nucleo.red import IdentificarPorIPCliente
+
 from .models import Pieza
 
 
-class FichaPublicaThrottle(AnonRateThrottle):
+class FichaPublicaThrottle(IdentificarPorIPCliente, AnonRateThrottle):
     scope = "ficha_publica"
 
 

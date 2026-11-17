@@ -1,6 +1,8 @@
 from django.urls import reverse
 from rest_framework import serializers
 
+from apps.nucleo.red import url_absoluta
+
 from .models import Fotografia, HistorialPieza, Pieza
 
 
@@ -69,7 +71,7 @@ class FotografiaSerializer(serializers.ModelSerializer):
         ruta = reverse("media-foto", args=[foto.id])
         if miniatura:
             ruta += "?miniatura=1"
-        return self.context["request"].build_absolute_uri(ruta)
+        return url_absoluta(self.context["request"], ruta)
 
     def get_url(self, foto):
         return self._ruta(foto)

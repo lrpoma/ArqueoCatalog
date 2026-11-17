@@ -11,6 +11,7 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 
 from apps.nucleo.negociacion import IgnorarAccept
+from apps.nucleo.red import url_absoluta
 from apps.nucleo.vistas_base import EliminacionLogicaMixin, RegistraUsuarioMixin
 
 from .filters import PiezaFilter
@@ -78,7 +79,7 @@ class PiezaViewSet(RegistraUsuarioMixin, EliminacionLogicaMixin, viewsets.ModelV
     def qr(self, request, pk=None):
         """PNG con el QR que apunta a la ficha pública de la pieza."""
         pieza = self.get_object()
-        url = request.build_absolute_uri(reverse("ficha-publica", args=[pieza.codigo]))
+        url = url_absoluta(request, reverse("ficha-publica", args=[pieza.codigo]))
         imagen = qrcode.make(url, error_correction=ERROR_CORRECT_M, box_size=10, border=2)
         salida = BytesIO()
         imagen.save(salida)

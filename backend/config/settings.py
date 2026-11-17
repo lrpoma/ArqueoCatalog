@@ -17,6 +17,10 @@ DEBUG = env("DEBUG")
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 CORS_ALLOWED_ORIGINS = env("CORS_ALLOWED_ORIGINS")
 CSRF_TRUSTED_ORIGINS = env("CSRF_TRUSTED_ORIGINS")
+# Detrás de Cloudflare Tunnel: URL pública (https://dominio) para el QR y las URLs de fotos,
+# y cabecera con la IP real del cliente (CF-Connecting-IP). Vacíos en desarrollo local.
+PUBLIC_BASE_URL = env("PUBLIC_BASE_URL", default="")
+IP_CLIENTE_HEADER = env("IP_CLIENTE_HEADER", default="")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -102,6 +106,8 @@ STORAGES = {
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
+# Instalador de la app; vive en el volumen de media para no depender de la imagen.
+APK_PATH = Path(env("APK_PATH", default=str(MEDIA_ROOT / "app" / "arqueocatalog.apk")))
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
