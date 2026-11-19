@@ -25,7 +25,7 @@ services:
       db:
         condition: service_healthy
     expose:
-      - "8000"
+      - "80"
     environment:
       DEBUG: "False"
       SECRET_KEY: ${SECRET_KEY:?definir SECRET_KEY}
